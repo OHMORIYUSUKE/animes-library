@@ -1,16 +1,35 @@
 "use client";
-import "./globals.css";
 import { Inter } from "next/font/google";
 import { trpc } from "./utils/trpc";
 
 const inter = Inter({ subsets: ["latin"] });
 
-function RootLayout({ children }: { children: React.ReactNode }) {
+const Meta = ({
+  title = "アニメライブラリ",
+  description = "アニメライブラリ アニメの情報を検索できます",
+}) => {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <>
+      <head>
+        <title>{title}</title>
+
+        <meta property="description" content={description} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+      </head>
+    </>
+  );
+};
+
+const RootLayout = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <html lang="ja">
+      <Meta />
+      <body className={inter.className} style={{ padding: 0, margin: 0 }}>
+        {children}
+      </body>
     </html>
   );
-}
+};
 
 export default trpc.withTRPC(RootLayout);
