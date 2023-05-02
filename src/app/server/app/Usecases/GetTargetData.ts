@@ -7,9 +7,15 @@ import { AnimeLibrary, AnimeLibraryResponse } from "../Models/Api/AnimeLibrary";
 export class GetTargetData {
   protected static async getTargetData(
     urlParams: UrlParams
-  ): Promise<z.infer<typeof AnimeLibraryResponse>> {
+  ): Promise<z.infer<typeof AnimeLibraryResponse> | void> {
     // shangriLaApiからjsonを取得
-    const getJsonResponse = await GetJsonResponse.getJsonResponse(urlParams);
+    let getJsonResponse: GetJsonResponse;
+    try {
+      getJsonResponse = await GetJsonResponse.getJsonResponse(urlParams);
+    } catch (e) {
+      console.log(undefined);
+      return;
+    }
 
     // スクレイピング
     const shangriLaApiResponse = getJsonResponse.jsonPerse();
@@ -44,6 +50,7 @@ export class GetTargetData {
         }
       )
     );
+    console.log(animeLibraryResponse);
     return animeLibraryResponse;
   }
 }

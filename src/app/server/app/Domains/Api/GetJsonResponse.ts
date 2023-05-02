@@ -28,17 +28,26 @@ export class GetJsonResponse {
     return false;
   }
 
-  public static async getJsonResponse(params: UrlParams): Promise<GetJsonResponse> {
+  public static async getJsonResponse(
+    params: UrlParams
+  ): Promise<GetJsonResponse> {
     if (!GetJsonResponse.getJsonResponseValidator(params)) {
       throw new Error("引数に誤りがあります。");
     }
-    const url = "https://api.moemoe.tokyo/anime/v1/master/" + String(params.year) + "/" + String(params.cool);
+    const url =
+      "https://api.moemoe.tokyo/anime/v1/master/" +
+      String(params.year) +
+      "/" +
+      String(params.cool);
+    console.log(url);
     const getApiResponse = new GetJsonResponse();
     let res: superagent.Response;
     try {
       res = await superagent.get(url).timeout(ConstValues.httpTimeOut);
     } catch (e) {
-      throw new Error("apiから情報を取得できませんでした。エラーメッセージ:" + e);
+      throw new Error(
+        "apiから情報を取得できませんでした。エラーメッセージ:" + e
+      );
     }
     this.json = res.body;
     return getApiResponse;
@@ -47,10 +56,15 @@ export class GetJsonResponse {
   public jsonPerse(): z.infer<typeof ShangriLaResponse> {
     const json = GetJsonResponse.json;
     try {
-      const validJson = ShangriLaResponse.parse(JSON.parse(JSON.stringify(json)));
+      const validJson = ShangriLaResponse.parse(
+        JSON.parse(JSON.stringify(json))
+      );
       return validJson;
     } catch (e) {
-      throw new Error("apiのjsonをパースできませんでした。apiに変更の可能性があります。エラーメッセージ:" + e);
+      throw new Error(
+        "apiのjsonをパースできませんでした。apiに変更の可能性があります。エラーメッセージ:" +
+          e
+      );
     }
   }
 }

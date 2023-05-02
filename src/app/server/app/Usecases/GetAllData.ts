@@ -29,7 +29,9 @@ export class GetAllData extends GetTargetData {
         throw new Error("indexを参照できませんでした。");
       }
       const animeLibraryResponse = await GetTargetData.getTargetData(urlParam);
-      allData.push(...animeLibraryResponse);
+      animeLibraryResponse === undefined
+        ? null
+        : allData.push(...animeLibraryResponse);
     }
     return allData;
   }
