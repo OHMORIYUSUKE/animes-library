@@ -7,5 +7,29 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
+  url      = "file:./dev.db"
+}
+
+model Anime {
+  id    Int     @id
+  year Int
+  cool Int
+  title String 
+  title_short1  String?
+  title_short2  String?
+  title_short3  String?
+  title_en String?
+  public_url String
+  twitter_account String
+  twitter_hash_tag String?
+  cours_id  String?
+  created_at DateTime
+  updated_at DateTime
+  sex Int
+  sequel Int
+  city_code Int
+  city_name String
+  product_companies String?
+  ogp_description String?
+  ogp_image_url String
 }
