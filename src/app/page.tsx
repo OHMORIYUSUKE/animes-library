@@ -20,7 +20,9 @@ import {
   SelectProps,
   Row,
   Col,
+  Spin,
 } from "antd";
+import { trpc } from "./utils/trpc";
 
 const { Header, Footer, Content } = Layout;
 
@@ -53,6 +55,8 @@ const App: React.FC = () => {
   const onClose = () => {
     setOpen(false);
   };
+
+  const hello = trpc.hello.useQuery({ text: "client" });
 
   return (
     <Layout>
@@ -109,20 +113,24 @@ const App: React.FC = () => {
           <Row gutter={[16, 16]}>
             {[...Array(16)].map((_, i) => (
               <Col className="gutter-row" span={6} key={i}>
-                <Card
-                  hoverable={true}
-                  cover={
-                    <img
-                      alt="Europe Street beat"
-                      src="https://otonari-anime.com/ogp.png?0127"
+                {hello.data ? (
+                  <Card
+                    hoverable={true}
+                    cover={
+                      <img
+                        alt="Europe Street beat"
+                        src="https://otonari-anime.com/ogp.png?0127"
+                      />
+                    }
+                  >
+                    <Meta
+                      title={hello.data.greeting}
+                      description="www.instagram.com"
                     />
-                  }
-                >
-                  <Meta
-                    title="Europe Street beat"
-                    description="www.instagram.com"
-                  />
-                </Card>
+                  </Card>
+                ) : (
+                  <Spin size="large" />
+                )}
               </Col>
             ))}
           </Row>
