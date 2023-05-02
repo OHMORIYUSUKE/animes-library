@@ -1,12 +1,13 @@
 import { z } from "zod";
 import { GetJsonResponse, UrlParams } from "../Domains/Api/GetJsonResponse";
 import { GetMetaData } from "../Domains/Scraping/GetMetaData";
-import { ReplaceInvalidChars } from "../Domains/Url/ReplaceInvalidChars";
 
 import { AnimeLibrary, AnimeLibraryResponse } from "../Models/Api/AnimeLibrary";
 
-export class GetDataAndSave {
-  protected static async getDataAndsave(urlParams: UrlParams): Promise<void> {
+export class GetTargetData {
+  protected static async getTargetData(
+    urlParams: UrlParams
+  ): Promise<z.infer<typeof AnimeLibraryResponse>> {
     // shangriLaApiからjsonを取得
     const getJsonResponse = await GetJsonResponse.getJsonResponse(urlParams);
 
@@ -25,6 +26,8 @@ export class GetDataAndSave {
               ...{
                 ogp_description: metaData.description(),
                 ogp_image_url: metaData.image(),
+                year: urlParams.year,
+                cool: urlParams.cool,
               },
             };
           } catch (e) {
@@ -33,21 +36,14 @@ export class GetDataAndSave {
               ...{
                 ogp_description: "",
                 ogp_image_url: "",
+                year: urlParams.year,
+                cool: urlParams.cool,
               },
             };
           }
         }
       )
     );
-
-    // titleを?などをreplaceしたものにする
-    const animeLibraryResponseReplaced = animeLibraryResponse.map(
-      (animeData) => {
-        animeData.title = ReplaceInvalidChars.replaceInvalidChars(
-          animeData.title
-        );
-        return animeData;
-      }
-    );
+    return animeLibraryResponse;
   }
 }

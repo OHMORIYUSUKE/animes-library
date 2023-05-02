@@ -1,13 +1,17 @@
+import { z } from "zod";
 import { UrlParams } from "../Domains/Api/GetJsonResponse";
 import { ConstValues } from "../Domains/Utils/ConstValues";
-import { GetDataAndSave } from "./GetDataAndSave";
+import { AnimeLibraryResponse } from "../Models/Api/AnimeLibrary";
+import { GetTargetData } from "./GetTargetData";
 
-export class GetAllDataAndSave extends GetDataAndSave {
+export class GetAllData extends GetTargetData {
   constructor() {
     super();
   }
 
-  public static async getAllDataAndSave(): Promise<void> {
+  public static async getAllData(): Promise<
+    z.infer<typeof AnimeLibraryResponse>
+  > {
     // すべての年とクールの情報
     const today = new Date();
     const nowYear = today.getFullYear();
@@ -17,13 +21,16 @@ export class GetAllDataAndSave extends GetDataAndSave {
         allUrlParams.push({ year: year, cool: cool } as UrlParams);
       }
     }
+    const allData: z.infer<typeof AnimeLibraryResponse> = [];
     // 今年から過去の任意年までの情報をすべて取得・それぞれ保存
     for (let i = 0; i < allUrlParams.length; i++) {
       const urlParam = allUrlParams[i];
       if (urlParam === undefined) {
         throw new Error("indexを参照できませんでした。");
       }
-      await GetDataAndSave.getDataAndsave(urlParam);
+      const animeLibraryResponse = await GetTargetData.getTargetData(urlParam);
+      allData.push(...animeLibraryResponse);
     }
+    return allData;
   }
 }

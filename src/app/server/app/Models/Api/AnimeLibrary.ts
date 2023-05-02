@@ -5,6 +5,8 @@ const AnimeLibraryAdd = z.object({
   // 追加データ
   ogp_image_url: z.union([z.string().url().startsWith("https://"), z.string()]),
   ogp_description: z.string(),
+  year: z.number(),
+  cool: z.number().min(1).max(4),
 });
 
 // このアプリケーションのapiレスポンス
