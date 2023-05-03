@@ -11,7 +11,7 @@ CREATE TABLE "Anime" (
     "public_url" TEXT NOT NULL,
     "twitter_account" TEXT NOT NULL,
     "twitter_hash_tag" TEXT,
-    "cours_id" TEXT,
+    "cours_id" INTEGER,
     "created_at" DATETIME NOT NULL,
     "updated_at" DATETIME NOT NULL,
     "sex" INTEGER NOT NULL,

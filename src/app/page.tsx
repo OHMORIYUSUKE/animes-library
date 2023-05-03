@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import {
+  FileImageOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   SearchOutlined,
@@ -58,11 +59,7 @@ const App: React.FC = () => {
     setOpen(false);
   };
 
-  const [animeList, setAnimeList] = useState<Anime[]>([]);
-
-  const aaa = trpc.getAnimeList.useQuery(null).data;
-
-  console.log(aaa);
+  const animeList = trpc.getAnimeList.useQuery(null).data;
 
   return (
     <Layout>
@@ -117,21 +114,34 @@ const App: React.FC = () => {
             />
           </Drawer>
           <Row gutter={[16, 16]}>
-            {[...Array(16)].map((_, i) => (
-              <Col className="gutter-row" span={6} key={i}>
-                <Card
-                  hoverable={true}
-                  cover={
-                    <img
-                      alt="Europe Street beat"
-                      src="https://otonari-anime.com/ogp.png?0127"
+            {animeList !== undefined ? (
+              animeList.map((anime, i) => (
+                <Col className="gutter-row" span={6} key={i}>
+                  <Card
+                    hoverable={true}
+                    cover={
+                      <img
+                        alt={anime.title}
+                        src={
+                          anime.ogp_image_url
+                            ? anime.ogp_image_url
+                            : "/images/no-image.png"
+                        }
+                      />
+                    }
+                  >
+                    <Meta
+                      title={anime.title}
+                      description={anime.product_companies}
                     />
-                  }
-                >
-                  <Meta title={"aaa"} description="www.instagram.com" />
-                </Card>
-              </Col>
-            ))}
+                  </Card>
+                </Col>
+              ))
+            ) : (
+              <>
+                <Spin size="large" />
+              </>
+            )}
           </Row>
         </Content>
         <Footer style={{ textAlign: "center" }}>
