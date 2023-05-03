@@ -2,7 +2,7 @@ import { z } from "zod";
 import { GetJsonResponse, UrlParams } from "../Domains/Api/GetJsonResponse";
 import { GetMetaData } from "../Domains/Scraping/GetMetaData";
 
-import { AnimeLibrary, AnimeLibraryResponse } from "../Models/Api/AnimeLibrary";
+import { AnimeLibrary, AnimeLibraryResponse } from "../Models/AnimeLibrary";
 
 export class GetTargetData {
   protected static async getTargetData(

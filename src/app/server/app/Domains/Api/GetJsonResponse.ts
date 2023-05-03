@@ -1,7 +1,7 @@
 import superagent from "superagent";
 import { z } from "zod";
 
-import { ShangriLaResponse } from "../../Models/Api/ShangriLa";
+import { ShangriLaResponse } from "../../Models/ShangriLa";
 import { ConstValues } from "../Utils/ConstValues";
 
 export interface UrlParams {

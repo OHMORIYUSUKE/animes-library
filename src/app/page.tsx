@@ -1,6 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
+  FileImageOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   SearchOutlined,
@@ -23,6 +24,8 @@ import {
   Spin,
 } from "antd";
 import { trpc } from "./utils/trpc";
+import { z } from "zod";
+import { Anime } from "@prisma/client";
 
 const { Header, Footer, Content } = Layout;
 
@@ -56,7 +59,7 @@ const App: React.FC = () => {
     setOpen(false);
   };
 
-  const hello = trpc.hello.useQuery({ text: "client" });
+  const animeList = trpc.getAnimeList.useQuery(null).data;
 
   return (
     <Layout>
@@ -111,28 +114,34 @@ const App: React.FC = () => {
             />
           </Drawer>
           <Row gutter={[16, 16]}>
-            {[...Array(16)].map((_, i) => (
-              <Col className="gutter-row" span={6} key={i}>
-                {hello.data ? (
+            {animeList !== undefined ? (
+              animeList.map((anime, i) => (
+                <Col className="gutter-row" span={6} key={i}>
                   <Card
                     hoverable={true}
                     cover={
                       <img
-                        alt="Europe Street beat"
-                        src="https://otonari-anime.com/ogp.png?0127"
+                        alt={anime.title}
+                        src={
+                          anime.ogp_image_url
+                            ? anime.ogp_image_url
+                            : "/images/no-image.png"
+                        }
                       />
                     }
                   >
                     <Meta
-                      title={hello.data.greeting}
-                      description="www.instagram.com"
+                      title={anime.title}
+                      description={anime.product_companies}
                     />
                   </Card>
-                ) : (
-                  <Spin size="large" />
-                )}
-              </Col>
-            ))}
+                </Col>
+              ))
+            ) : (
+              <>
+                <Spin size="large" />
+              </>
+            )}
           </Row>
         </Content>
         <Footer style={{ textAlign: "center" }}>

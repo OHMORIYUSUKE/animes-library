@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { UrlParams } from "../Domains/Api/GetJsonResponse";
 import { ConstValues } from "../Domains/Utils/ConstValues";
-import { AnimeLibraryResponse } from "../Models/Api/AnimeLibrary";
+import { AnimeLibraryResponse } from "../Models/AnimeLibrary";
 import { GetTargetData } from "./GetTargetData";
 
 export class GetAllData extends GetTargetData {
