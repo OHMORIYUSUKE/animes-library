@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -23,6 +23,8 @@ import {
   Spin,
 } from "antd";
 import { trpc } from "./utils/trpc";
+import { z } from "zod";
+import { Anime } from "@prisma/client";
 
 const { Header, Footer, Content } = Layout;
 
@@ -56,7 +58,11 @@ const App: React.FC = () => {
     setOpen(false);
   };
 
-  const hello = trpc.hello.useQuery({ text: "client" });
+  const [animeList, setAnimeList] = useState<Anime[]>([]);
+
+  const aaa = trpc.getAnimeList.useQuery(null).data;
+
+  console.log(aaa);
 
   return (
     <Layout>
@@ -113,24 +119,17 @@ const App: React.FC = () => {
           <Row gutter={[16, 16]}>
             {[...Array(16)].map((_, i) => (
               <Col className="gutter-row" span={6} key={i}>
-                {hello.data ? (
-                  <Card
-                    hoverable={true}
-                    cover={
-                      <img
-                        alt="Europe Street beat"
-                        src="https://otonari-anime.com/ogp.png?0127"
-                      />
-                    }
-                  >
-                    <Meta
-                      title={hello.data.greeting}
-                      description="www.instagram.com"
+                <Card
+                  hoverable={true}
+                  cover={
+                    <img
+                      alt="Europe Street beat"
+                      src="https://otonari-anime.com/ogp.png?0127"
                     />
-                  </Card>
-                ) : (
-                  <Spin size="large" />
-                )}
+                  }
+                >
+                  <Meta title={"aaa"} description="www.instagram.com" />
+                </Card>
               </Col>
             ))}
           </Row>

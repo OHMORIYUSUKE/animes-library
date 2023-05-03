@@ -1,18 +1,16 @@
 {
-  "name": "app",
+  "name": "seeder",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "type": "module",
+  "main": "./Repository/seed.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "seed": "ts-node ./Repository/seed.ts"
   },
   "author": "",
+  "type": "module",
   "license": "ISC",
-  "dependencies": {
-    "@prisma/client": "^4.13.0"
-  },
   "devDependencies": {
-    "prisma": "^4.13.0"
+    "ts-node": "^10.9.1"
   }
 }
