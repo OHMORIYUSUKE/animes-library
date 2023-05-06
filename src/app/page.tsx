@@ -22,6 +22,7 @@ import {
   Row,
   Col,
   Spin,
+  AutoComplete,
 } from "antd";
 import { trpc } from "./utils/trpc";
 import { z } from "zod";
@@ -29,23 +30,9 @@ import { Anime } from "@prisma/client";
 
 const { Header, Footer, Content } = Layout;
 
-const options: SelectProps["options"] = [];
-
-for (let i = 10; i < 36; i++) {
-  options.push({
-    label: i.toString(36) + i,
-    value: i.toString(36) + i,
-  });
-}
-
-const handleChange = (value: string[]) => {
-  console.log(`selected ${value}`);
-};
-
 const { Meta } = Card;
 
 const App: React.FC = () => {
-  const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -59,7 +46,32 @@ const App: React.FC = () => {
     setOpen(false);
   };
 
-  const animeList = trpc.getAnimeList.useQuery(null).data;
+  const [value, setValue] = useState("");
+
+  const animeList = trpc.getAnimeList.useQuery({
+    title: value,
+    cool: null,
+    sex: null,
+    year: null,
+    productCompanies: null,
+  }).data;
+
+  const onSelect = (data: string) => {
+    console.log("onSelect", data);
+  };
+
+  const [recommends, setRecommends] = useState<{ value: string }[]>([]);
+
+  useEffect(() => {
+    const anime = animeList?.map((data) => {
+      return { value: data.title };
+    })
+      ? animeList?.map((data) => {
+          return { value: data.title };
+        })
+      : [];
+    setRecommends(anime);
+  }, [animeList]);
 
   return (
     <Layout>
@@ -100,18 +112,16 @@ const App: React.FC = () => {
             onClose={onClose}
             open={open}
           >
-            <Input.Search size="large" placeholder="input here" enterButton />
-            <div style={{ margin: 20 }}></div>
-            <Select
-              mode="multiple"
-              allowClear
+            <AutoComplete
+              value={value}
+              options={recommends}
               style={{ width: "100%" }}
-              placeholder="Please select"
-              defaultValue={["a10", "c12"]}
-              onChange={handleChange}
-              options={options}
-              size={"large"}
+              onSelect={onSelect}
+              onSearch={() => setRecommends(recommends)}
+              onChange={(data) => setValue(data)}
+              placeholder="アニメのタイトル"
             />
+            <p>{animeList?.length}件</p>
           </Drawer>
           <Row gutter={[16, 16]}>
             {animeList !== undefined ? (
