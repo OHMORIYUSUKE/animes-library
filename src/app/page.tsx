@@ -22,6 +22,7 @@ import {
   Row,
   Col,
   Spin,
+  AutoComplete,
 } from "antd";
 import { trpc } from "./utils/trpc";
 import { z } from "zod";
@@ -29,23 +30,9 @@ import { Anime } from "@prisma/client";
 
 const { Header, Footer, Content } = Layout;
 
-const options: SelectProps["options"] = [];
-
-for (let i = 10; i < 36; i++) {
-  options.push({
-    label: i.toString(36) + i,
-    value: i.toString(36) + i,
-  });
-}
-
-const handleChange = (value: string[]) => {
-  console.log(`selected ${value}`);
-};
-
 const { Meta } = Card;
 
 const App: React.FC = () => {
-  const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -59,7 +46,23 @@ const App: React.FC = () => {
     setOpen(false);
   };
 
-  const animeList = trpc.getAnimeList.useQuery(null).data;
+  const [value, setValue] = useState("");
+
+  const animeList = trpc.getAnimeList.useQuery({
+    title: value,
+    cool: null,
+    sex: null,
+    year: null,
+    productCompanies: null,
+  }).data;
+
+  const onSelect = (data: string) => {
+    console.log("onSelect", data);
+  };
+
+  console.log(animeList);
+
+  const [recommends, setRecommends] = useState<{ value: string }[]>([]);
 
   return (
     <Layout>
@@ -100,17 +103,27 @@ const App: React.FC = () => {
             onClose={onClose}
             open={open}
           >
-            <Input.Search size="large" placeholder="input here" enterButton />
-            <div style={{ margin: 20 }}></div>
-            <Select
-              mode="multiple"
-              allowClear
+            <p>検索ワード : {value}</p>
+            <p>
+              {animeList?.length}件/
+              {recommends ? recommends.length : "loading..."}件
+            </p>
+            <AutoComplete
+              value={value}
+              options={recommends}
               style={{ width: "100%" }}
-              placeholder="Please select"
-              defaultValue={["a10", "c12"]}
-              onChange={handleChange}
-              options={options}
-              size={"large"}
+              onSelect={onSelect}
+              onSearch={(text) =>
+                setRecommends(
+                  !animeList
+                    ? []
+                    : animeList?.map((anime) => {
+                        return { value: anime.title };
+                      })!
+                )
+              }
+              onChange={(data) => setValue(data)}
+              placeholder="アニメのタイトル"
             />
           </Drawer>
           <Row gutter={[16, 16]}>
