@@ -60,9 +60,18 @@ const App: React.FC = () => {
     console.log("onSelect", data);
   };
 
-  console.log(animeList);
-
   const [recommends, setRecommends] = useState<{ value: string }[]>([]);
+
+  useEffect(() => {
+    const anime = animeList?.map((data) => {
+      return { value: data.title };
+    })
+      ? animeList?.map((data) => {
+          return { value: data.title };
+        })
+      : [];
+    setRecommends(anime);
+  }, [animeList]);
 
   return (
     <Layout>
@@ -103,28 +112,16 @@ const App: React.FC = () => {
             onClose={onClose}
             open={open}
           >
-            <p>検索ワード : {value}</p>
-            <p>
-              {animeList?.length}件/
-              {recommends ? recommends.length : "loading..."}件
-            </p>
             <AutoComplete
               value={value}
               options={recommends}
               style={{ width: "100%" }}
               onSelect={onSelect}
-              onSearch={(text) =>
-                setRecommends(
-                  !animeList
-                    ? []
-                    : animeList?.map((anime) => {
-                        return { value: anime.title };
-                      })!
-                )
-              }
+              onSearch={() => setRecommends(recommends)}
               onChange={(data) => setValue(data)}
               placeholder="アニメのタイトル"
             />
+            <p>{animeList?.length}件</p>
           </Drawer>
           <Row gutter={[16, 16]}>
             {animeList !== undefined ? (
