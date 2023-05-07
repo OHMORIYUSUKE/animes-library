@@ -23,10 +23,12 @@ import {
   Col,
   Spin,
   AutoComplete,
+  Modal,
 } from "antd";
 import { trpc } from "./utils/trpc";
 import { z } from "zod";
 import { Anime } from "@prisma/client";
+import { AnimeCard } from "./component/card";
 
 const { Header, Footer, Content } = Layout;
 
@@ -112,6 +114,7 @@ const App: React.FC = () => {
             onClose={onClose}
             open={open}
           >
+            <p>{animeList?.length}件</p>
             <AutoComplete
               value={value}
               options={recommends}
@@ -121,30 +124,12 @@ const App: React.FC = () => {
               onChange={(data) => setValue(data)}
               placeholder="アニメのタイトル"
             />
-            <p>{animeList?.length}件</p>
           </Drawer>
           <Row gutter={[16, 16]}>
             {animeList !== undefined ? (
               animeList.map((anime, i) => (
                 <Col className="gutter-row" span={6} key={i}>
-                  <Card
-                    hoverable={true}
-                    cover={
-                      <img
-                        alt={anime.title}
-                        src={
-                          anime.ogp_image_url
-                            ? anime.ogp_image_url
-                            : "/images/no-image.png"
-                        }
-                      />
-                    }
-                  >
-                    <Meta
-                      title={anime.title}
-                      description={anime.product_companies}
-                    />
-                  </Card>
+                  <AnimeCard anime={anime}></AnimeCard>
                 </Col>
               ))
             ) : (
@@ -155,7 +140,7 @@ const App: React.FC = () => {
           </Row>
         </Content>
         <Footer style={{ textAlign: "center" }}>
-          Ant Design ©2023 Created by Ant UED
+          ©{new Date().getFullYear()} アニメライブラリー
         </Footer>
       </Layout>
     </Layout>
