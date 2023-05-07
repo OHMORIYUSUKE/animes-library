@@ -13,12 +13,11 @@ jobs:
         with:
           node-version: "18"
           cache: npm
+          working-directory: ./src/app/server/app/Repository/prisma
 
-      # repositoryの中身にアクセスするためにチェックアウト
       - name: Checkout
         uses: actions/checkout@v2
 
-      # 実行
       - name: Run
         run: |
           cd src/app/server/app/Repository/prisma/
