@@ -20,6 +20,8 @@ jobs:
       - name: Run
         run: |
           npm install
+          npm run migrate
+          npm run generate
           cd ./src/app/server/app/Repository/prisma
           npm install
           npm run seed
