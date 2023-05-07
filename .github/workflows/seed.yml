@@ -19,6 +19,7 @@ jobs:
 
       - name: Run
         run: |
+          npm install
           cd ./src/app/server/app/Repository/prisma
           npm install
           npm run seed
