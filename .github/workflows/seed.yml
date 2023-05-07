@@ -7,20 +7,22 @@ jobs:
   run:
     name: run
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./src/app/server/app/Repository/prisma
+
     steps:
       - name: Set Up
         uses: actions/setup-node@v2
         with:
           node-version: "18"
           cache: npm
-          working-directory: ./src/app/server/app/Repository/prisma
 
       - name: Checkout
         uses: actions/checkout@v2
 
       - name: Run
         run: |
-          cd src/app/server/app/Repository/prisma/
           npm install
           npm run seed
           git config user.name github-actions
