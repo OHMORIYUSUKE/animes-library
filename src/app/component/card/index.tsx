@@ -40,7 +40,7 @@ type AnimeCard = {
   anime: SerializeObject<Anime>;
 };
 
-const getSeasonByNumber = (num: number): string => {
+export const getSeasonByNumber = (num: number): string => {
   if (num === 1) return "冬";
   if (num === 2) return "春";
   if (num === 3) return "夏";
@@ -82,8 +82,14 @@ export const AnimeCard: React.FC<AnimeCard> = ({ anime }) => {
           />
         </div>
         <Descriptions bordered>
-          <Descriptions.Item label="タイトル" span={3}>
+          <Descriptions.Item label="タイトル" span={2}>
             {anime.title}
+          </Descriptions.Item>
+          <Descriptions.Item label="略称" span={1}>
+            {anime.title_short1}
+          </Descriptions.Item>
+          <Descriptions.Item label="英語タイトル" span={3}>
+            {anime.title_en}
           </Descriptions.Item>
           <Descriptions.Item label="説明" span={3}>
             {anime.ogp_description}

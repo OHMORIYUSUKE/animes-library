@@ -6,15 +6,37 @@ import { prisma } from "@/app/server/app/Repository/prisma/prisma";
 
 const getAnimeListParam = z.object({
   title: z.string().nullable(), // ショートタイトル検索も可能にするToDo
-  year: z.number().nullable(),
-  cool: z.enum(["Spring", "Summer", "Autumn", "Winter"]).nullable(),
-  sex: z.enum(["Man", "Woman"]).nullable(),
-  productCompanies: z.string().nullable(),
+  year: z.array(z.number()).nullable(),
+  cool: z.array(z.number()).nullable(),
+  sex: z.array(z.number()).nullable(),
+  productCompanies: z.array(z.string()).nullable(),
 });
 export const appRouter = router({
   getAnimeList: procedure.input(getAnimeListParam).query(async (opts) => {
+    const allAnimeList = await prisma.anime.findMany();
     const animeList = await prisma.anime.findMany({
       where: {
+        year: {
+          in: opts.input.year
+            ? opts.input.year
+            : allAnimeList.map((data) => {
+                return data.year;
+              }),
+        },
+        cool: {
+          in: opts.input.cool
+            ? opts.input.cool
+            : allAnimeList.map((data) => {
+                return data.cool;
+              }),
+        },
+        sex: {
+          in: opts.input.sex
+            ? opts.input.sex
+            : allAnimeList.map((data) => {
+                return data.sex;
+              }),
+        },
         title: {
           contains: opts.input.title ? opts.input.title : "",
         },
