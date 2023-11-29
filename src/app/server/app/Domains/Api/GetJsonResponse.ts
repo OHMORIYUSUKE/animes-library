@@ -35,11 +35,10 @@ export class GetJsonResponse {
       throw new Error("引数に誤りがあります。");
     }
     const url =
-      "https://api.moemoe.tokyo/anime/v1/master/" +
+      "https://anime-api.deno.dev/anime/v1/master/" +
       String(params.year) +
       "/" +
       String(params.cool);
-    console.log(url);
     const getApiResponse = new GetJsonResponse();
     let res: superagent.Response;
     try {

@@ -13,10 +13,6 @@ async function main() {
         ...anime,
       },
     });
-    console.log(
-      `https://api.moemoe.tokyo/anime/v1/master/${anime.year}/${anime.cool}`
-    );
-    console.log(res);
   });
   console.log("正常に終了🎉🎉");
 }

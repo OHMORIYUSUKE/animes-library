@@ -5,7 +5,7 @@ import { AnimeLibrary } from "@/app/server/app/Models/AnimeLibrary";
 import { prisma } from "@/app/server/app/Repository/prisma/prisma";
 
 const getAnimeListParam = z.object({
-  title: z.string().nullable(), // ショートタイトル検索も可能にするToDo
+  title: z.string().nullable(),
   year: z.array(z.number()).nullable(),
   cool: z.array(z.number()).nullable(),
   sex: z.array(z.number()).nullable(),
@@ -42,7 +42,6 @@ export const appRouter = router({
         },
       },
     });
-    console.log(animeList);
     return animeList;
   }),
 });

@@ -13,7 +13,6 @@ export class GetTargetData {
     try {
       getJsonResponse = await GetJsonResponse.getJsonResponse(urlParams);
     } catch (e) {
-      console.log(undefined);
       return;
     }
 
@@ -50,7 +49,6 @@ export class GetTargetData {
         }
       )
     );
-    console.log(animeLibraryResponse);
     return animeLibraryResponse;
   }
 }

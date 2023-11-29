@@ -32,6 +32,7 @@ export class GetAllData extends GetTargetData {
       animeLibraryResponse === undefined
         ? null
         : allData.push(...animeLibraryResponse);
+      console.log(animeLibraryResponse);
     }
     return allData;
   }

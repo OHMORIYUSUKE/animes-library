@@ -52,9 +52,9 @@ const App: React.FC = () => {
 
   const animeList = trpc.getAnimeList.useQuery({
     title: value,
-    cool: [1],
+    cool: null,
     sex: null,
-    year: [2023],
+    year: null,
     productCompanies: null,
   }).data;
 
