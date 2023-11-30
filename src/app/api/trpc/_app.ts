@@ -42,7 +42,7 @@ export const appRouter = router({
         },
       },
     });
-    return animeList;
+    return animeList.reverse();
   }),
 });
 
