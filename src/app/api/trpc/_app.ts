@@ -11,6 +11,11 @@ const getAnimeListParam = z.object({
   sex: z.array(z.number()).nullable(),
   productCompanies: z.array(z.string()).nullable(),
 });
+
+const getAnimeNameListParam = z.object({
+  title: z.string().nullable(),
+});
+
 export const appRouter = router({
   getAnimeList: procedure.input(getAnimeListParam).query(async (opts) => {
     const allAnimeList = await prisma.anime.findMany();
@@ -44,6 +49,21 @@ export const appRouter = router({
     });
     return animeList.reverse();
   }),
+  getAnimeNameList: procedure
+    .input(getAnimeNameListParam)
+    .query(async (opts) => {
+      const animeList = await prisma.anime.findMany({
+        where: {
+          title: {
+            contains: opts.input.title ? opts.input.title : "",
+          },
+        },
+      });
+      const res = animeList
+        ? animeList.map((item) => ({ value: item.title }))
+        : [];
+      return res;
+    }),
 });
 
 // export type definition of API

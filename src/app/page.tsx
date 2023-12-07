@@ -24,9 +24,10 @@ import {
   Spin,
   AutoComplete,
   Modal,
+  Space,
 } from "antd";
 import { trpc } from "./utils/trpc";
-import { z } from "zod";
+import { string, z } from "zod";
 import { Anime } from "@prisma/client";
 import { AnimeCard } from "./component/card";
 
@@ -39,15 +40,6 @@ const App: React.FC = () => {
     token: { colorBgContainer },
   } = theme.useToken();
 
-  const [open, setOpen] = useState(false);
-  const showDrawer = () => {
-    setOpen(true);
-  };
-
-  const onClose = () => {
-    setOpen(false);
-  };
-
   const [value, setValue] = useState("");
 
   const animeList = trpc.getAnimeList.useQuery({
@@ -57,23 +49,6 @@ const App: React.FC = () => {
     year: null,
     productCompanies: null,
   }).data;
-
-  const onSelect = (data: string) => {
-    console.log("onSelect", data);
-  };
-
-  const [recommends, setRecommends] = useState<{ value: string }[]>([]);
-
-  useEffect(() => {
-    const anime = animeList?.map((data) => {
-      return { value: data.title };
-    })
-      ? animeList?.map((data) => {
-          return { value: data.title };
-        })
-      : [];
-    setRecommends(anime);
-  }, [animeList]);
 
   return (
     <Layout>
@@ -86,20 +61,21 @@ const App: React.FC = () => {
             top: 0,
             zIndex: 1,
             width: "100%",
+            textAlign: "center",
           }}
         >
-          <Button
-            type="text"
-            icon={<SearchOutlined />}
-            onClick={showDrawer}
-            style={{
-              fontSize: "16px",
-              width: 64,
-              height: 64,
-            }}
+          <AutoComplete
+            value={value}
+            options={
+              trpc.getAnimeNameList.useQuery({
+                title: value,
+              }).data
+            }
+            style={{ width: "50%" }}
+            onChange={(data) => setValue(data)}
+            placeholder="🔍 アニメのタイトル"
           />
         </Header>
-
         <Content
           style={{
             margin: "24px 16px",
@@ -108,23 +84,6 @@ const App: React.FC = () => {
             background: colorBgContainer,
           }}
         >
-          <Drawer
-            title={"検索"}
-            placement={"left"}
-            onClose={onClose}
-            open={open}
-          >
-            <p>{animeList?.length}件</p>
-            <AutoComplete
-              value={value}
-              options={recommends}
-              style={{ width: "100%" }}
-              onSelect={onSelect}
-              onSearch={() => setRecommends(recommends)}
-              onChange={(data) => setValue(data)}
-              placeholder="アニメのタイトル"
-            />
-          </Drawer>
           <Row gutter={[16, 16]}>
             {animeList !== undefined ? (
               animeList.map((anime, i) => (
